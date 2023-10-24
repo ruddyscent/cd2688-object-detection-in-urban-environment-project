@@ -2,18 +2,10 @@ FROM tensorflow/tensorflow:2.14.0-gpu
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN rm -rf /etc/apt/sources.list.d/cuda.list
-RUN rm -rf /etc/apt/sources.list.d/nvidia-ml.list
-RUN apt-key del 7fa2af80
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
-# Adding the above lines to workaround a recent issue introduced by NVIDIA https://github.com/NVIDIA/nvidia-docker/issues/1631
-
 # Install apt dependencies
 RUN apt-get update && apt-get install -y \
     git \
     gpg-agent \
-    python3-cairocffi \
     protobuf-compiler \
     python3-pil \
     python3-lxml \
@@ -36,6 +28,5 @@ RUN python -m pip install .
 ENV TF_CPP_MIN_LOG_LEVEL 3
 
 # Install SageMaker training-toolkit
-RUN pip3 install sagemaker-training
+RUN pip3 install sagemaker-training==4.7.3 Pillow==10.1.0
 RUN pip install "opencv-python-headless<4.3"
-
